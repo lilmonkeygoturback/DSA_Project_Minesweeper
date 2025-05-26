@@ -11,6 +11,8 @@ public class MinesweeperFrame extends JFrame {
     private JMenuItem continueItem;
     private int gridRows, gridCols, gridMines;
     private JPanel gridPanel;
+    private BoardLogic boardLogic;
+
 
     public MinesweeperFrame(int rows, int cols, int mines) {
         this.rows = rows;
@@ -111,7 +113,72 @@ public class MinesweeperFrame extends JFrame {
     }
 
     private void handleCellClick(int row, int col) {
-        // TODO: Add game logic for revealing cells, handling mines, etc.
-        buttons[row][col].setText("X"); // Placeholder for click
+    if (boardLogic == null) {
+        boardLogic = new BoardLogic(gridRows, gridCols, gridMines);
+    }
+
+    Cell cell = boardLogic.grid[row][col];
+    if (cell.isRevealed || cell.isFlagged) return;
+
+    if (cell.isMine) {
+        cell.isRevealed = true;
+        revealAllMines();
+        JOptionPane.showMessageDialog(this, "💥 Boom! You hit a mine.", "Game Over", JOptionPane.ERROR_MESSAGE);
+        gameInProgress = false;
+        continueItem.setEnabled(false);
+    } else {
+        boardLogic.reveal(row, col);  // Dùng BFS mở ô trống
+        updateButtons();
+        if (checkWin()) {
+            JOptionPane.showMessageDialog(this, "🎉 You Win!", "Victory", JOptionPane.INFORMATION_MESSAGE);
+            gameInProgress = false;
+            continueItem.setEnabled(false);
+            }
+        }
+    }
+    private void updateButtons() {
+    for (int r = 0; r < gridRows; r++) {
+        for (int c = 0; c < gridCols; c++) {
+            Cell cell = boardLogic.grid[r][c];
+            JButton btn = buttons[r][c];
+
+            if (cell.isRevealed) {
+                btn.setEnabled(false);
+                if (cell.isMine) {
+                    btn.setText("💣");
+                    btn.setBackground(Color.RED);
+                } else if (cell.adjacentMines > 0) {
+                    btn.setText(String.valueOf(cell.adjacentMines));
+                    btn.setBackground(Color.LIGHT_GRAY);
+                } else {
+                    btn.setText("");
+                    btn.setBackground(Color.WHITE);
+                }
+            }
+        }
+    }
+    }
+    private void revealAllMines() {
+    for (int r = 0; r < gridRows; r++) {
+        for (int c = 0; c < gridCols; c++) {
+            Cell cell = boardLogic.grid[r][c];
+            if (cell.isMine) {
+                buttons[r][c].setText("💣");
+                buttons[r][c].setBackground(Color.RED);
+                buttons[r][c].setEnabled(false);
+            }
+            }
+        }
+    }
+    private boolean checkWin() {
+    for (int r = 0; r < gridRows; r++) {
+        for (int c = 0; c < gridCols; c++) {
+            Cell cell = boardLogic.grid[r][c];
+            if (!cell.isMine && !cell.isRevealed) {
+                return false;
+                }
+            }
+        }
+    return true;
     }
 }
