@@ -26,7 +26,10 @@ public class MenuFrame extends JFrame {
         });
 
         playButton.addActionListener(e -> {
-            new MinesweeperFrame(rows, cols, mines);
+            // Always start a new game in progress
+            MinesweeperFrame frame = new MinesweeperFrame(rows, cols, mines);
+            frame.setVisible(true);
+            frame.startNewGame(); // Ensure timer, counter, and smiley are reset
             dispose();
         });
         exitButton.addActionListener(e -> System.exit(0));

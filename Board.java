@@ -176,11 +176,4 @@ public class Board {
         }
         System.out.println("+");
     }
-    public class Main {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Board board = new Board(9, 9, 10);
-        board.play(scanner);
-        }
-    }
 }
