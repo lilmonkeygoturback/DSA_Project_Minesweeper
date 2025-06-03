@@ -22,6 +22,7 @@ public class MinesweeperFrame extends JFrame {
     private int secondsElapsed;
     private JButton smileyButton;
     private static final int TILE_SIZE = 40; // Match button size
+    private Clip themeClip;
 
 
     public MinesweeperFrame(int rows, int cols, int mines) {
@@ -42,6 +43,28 @@ public class MinesweeperFrame extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
+    }
+
+    public MinesweeperFrame(int rows, int cols, int mines, Clip themeClip) {
+        this.rows = rows;
+        this.cols = cols;
+        this.mines = mines;
+        this.currentRows = rows;
+        this.currentCols = cols;
+        this.currentMines = mines;
+        this.gridRows = rows;
+        this.gridCols = cols;
+        this.gridMines = mines;
+        this.themeClip = themeClip;
+        setTitle("Minesweeper");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
+        setJMenuBar(createMenuBar());
+        initUI();
+        pack();
+        setLocationRelativeTo(null);
+        setVisible(true);
+        lowerThemeVolume();
     }
 
     private JMenuBar createMenuBar() {
@@ -323,6 +346,17 @@ public class MinesweeperFrame extends JFrame {
             }
         }
         return true;
+    }
+
+    private void lowerThemeVolume() {
+        if (themeClip != null) {
+            try {
+                FloatControl gainControl = (FloatControl) themeClip.getControl(FloatControl.Type.MASTER_GAIN);
+                gainControl.setValue(-15.0f); // Lower volume by 15 decibels
+            } catch (Exception ex) {
+                System.err.println("Error lowering theme volume: " + ex.getMessage());
+            }
+        }
     }
 
     // Call this to ensure timer, counter, and smiley are reset for a new game
