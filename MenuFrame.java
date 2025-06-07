@@ -1,5 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
+import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 import java.io.File;
 import java.io.IOException;
@@ -16,7 +17,11 @@ public class MenuFrame extends JFrame {
         setSize(350, 350);
         setLocationRelativeTo(null);
         setResizable(false);
-
+        try {
+            setIconImage(ImageIO.read(getClass().getResource("assets/Sprites/images.jpeg")));
+        } catch (IOException e) {
+            System.err.println("Error loading icon image: " + e.getMessage());
+        }
         // Create a main panel with custom background color
         JPanel mainPanel = new JPanel() {
             @Override

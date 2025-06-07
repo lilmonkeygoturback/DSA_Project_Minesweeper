@@ -50,6 +50,7 @@ public class BoardLogic {
         return count;
     }
 
+    // using BFS to reveal cells
     public void reveal(int row, int col) {
         Queue<int[]> queue = new LinkedList<>();
         queue.add(new int[]{row, col});

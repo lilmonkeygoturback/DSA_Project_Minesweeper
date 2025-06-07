@@ -1,5 +1,7 @@
 import java.awt.*;
 import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.sound.sampled.*;
 import javax.swing.*;
 
@@ -65,6 +67,11 @@ public class MinesweeperFrame extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         lowerThemeVolume();
+        try {
+            setIconImage(ImageIO.read(getClass().getResource("assets/Sprites/images.jpeg")));
+        } catch (IOException e) {
+            System.err.println("Error loading icon image: " + e.getMessage());
+        }
     }
 
     private JMenuBar createMenuBar() {
